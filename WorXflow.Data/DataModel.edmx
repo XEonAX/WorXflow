@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DataModelStoreContainer">
+    <EntitySet Name="Users" EntityType="DataModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WorkTasks" EntityType="DataModel.Store.WorkTasks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StatusMessages" EntityType="DataModel.Store.StatusMessages" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WorkTaskFollowingUser" EntityType="DataModel.Store.WorkTaskFollowingUser" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="WorkTaskAssignedToUser" Association="DataModel.Store.WorkTaskAssignedToUser">
+      <End Role="WorkTask" EntitySet="WorkTasks" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="WorkTaskAssignedByUser" Association="DataModel.Store.WorkTaskAssignedByUser">
+      <End Role="WorkTask" EntitySet="WorkTasks" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="WorkTaskHistory" Association="DataModel.Store.WorkTaskStatus">
+      <End Role="WorkTask" EntitySet="WorkTasks" />
+      <End Role="Status" EntitySet="StatusMessages" />
+    </AssociationSet>
+    <AssociationSet Name="StatusUser" Association="DataModel.Store.StatusUser">
+      <End Role="Status" EntitySet="StatusMessages" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WorkTaskFollowingUser_WorkTask" Association="DataModel.Store.FK_WorkTaskFollowingUser_WorkTask">
+      <End Role="WorkTask" EntitySet="WorkTasks" />
+      <End Role="WorkTaskFollowingUser" EntitySet="WorkTaskFollowingUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WorkTaskFollowingUser_User" Association="DataModel.Store.FK_WorkTaskFollowingUser_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="WorkTaskFollowingUser" EntitySet="WorkTaskFollowingUser" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WorkTasks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AssignedToUser_Id" Type="int" Nullable="true" />
+    <Property Name="AssignedByUser_Id" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="StatusMessages">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WorkTaskId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WorkTaskFollowingUser">
+    <Key>
+      <PropertyRef Name="Following_Id" />
+      <PropertyRef Name="Followers_Id" />
+    </Key>
+    <Property Name="Following_Id" Type="int" Nullable="false" />
+    <Property Name="Followers_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="WorkTaskAssignedToUser">
+    <End Role="WorkTask" Type="DataModel.Store.WorkTasks" Multiplicity="*" />
+    <End Role="User" Type="DataModel.Store.Users" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WorkTask">
+        <PropertyRef Name="AssignedToUser_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="WorkTaskAssignedByUser">
+    <End Role="WorkTask" Type="DataModel.Store.WorkTasks" Multiplicity="*" />
+    <End Role="User" Type="DataModel.Store.Users" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WorkTask">
+        <PropertyRef Name="AssignedByUser_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="WorkTaskStatus">
+    <End Role="WorkTask" Type="DataModel.Store.WorkTasks" Multiplicity="1" />
+    <End Role="Status" Type="DataModel.Store.StatusMessages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WorkTask">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Status">
+        <PropertyRef Name="WorkTaskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="StatusUser">
+    <End Role="Status" Type="DataModel.Store.StatusMessages" Multiplicity="*" />
+    <End Role="User" Type="DataModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Status">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WorkTaskFollowingUser_WorkTask">
+    <End Role="WorkTask" Type="DataModel.Store.WorkTasks" Multiplicity="1" />
+    <End Role="WorkTaskFollowingUser" Type="DataModel.Store.WorkTaskFollowingUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WorkTask">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WorkTaskFollowingUser">
+        <PropertyRef Name="Following_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WorkTaskFollowingUser_User">
+    <End Role="WorkTaskFollowingUser" Type="DataModel.Store.WorkTaskFollowingUser" Multiplicity="*" />
+    <End Role="User" Type="DataModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WorkTaskFollowingUser">
+        <PropertyRef Name="Followers_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="DataModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="DataModel.User" />
+          <EntitySet Name="WorkTasks" EntityType="DataModel.WorkTask" />
+          <AssociationSet Name="WorkTaskAssignedToUser" Association="DataModel.WorkTaskAssignedToUser">
+            <End Role="WorkTask" EntitySet="WorkTasks" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="WorkTaskAssignedByUser" Association="DataModel.WorkTaskAssignedByUser">
+            <End Role="WorkTask" EntitySet="WorkTasks" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="StatusMessages" EntityType="DataModel.StatusMessage" />
+          <AssociationSet Name="WorkTaskHistory" Association="DataModel.WorkTaskStatus">
+            <End Role="WorkTask" EntitySet="WorkTasks" />
+            <End Role="Status" EntitySet="StatusMessages" />
+          </AssociationSet>
+          <AssociationSet Name="StatusUser" Association="DataModel.StatusUser">
+            <End Role="Status" EntitySet="StatusMessages" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="WorkTaskFollowingUser" Association="DataModel.WorkTaskFollowingUser">
+            <End Role="WorkTask" EntitySet="WorkTasks" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="WorkTasks" Relationship="DataModel.WorkTaskAssignedToUser" FromRole="User" ToRole="WorkTask" />
+          <NavigationProperty Name="AssignedWorkTasks" Relationship="DataModel.WorkTaskAssignedByUser" FromRole="User" ToRole="WorkTask" />
+          <NavigationProperty Name="Status" Relationship="DataModel.StatusUser" FromRole="User" ToRole="Status" />
+          <NavigationProperty Name="Following" Relationship="DataModel.WorkTaskFollowingUser" FromRole="User" ToRole="WorkTask" />
+        </EntityType>
+        <EntityType Name="WorkTask">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <NavigationProperty Name="AssignedToUser" Relationship="DataModel.WorkTaskAssignedToUser" FromRole="WorkTask" ToRole="User" />
+          <NavigationProperty Name="AssignedByUser" Relationship="DataModel.WorkTaskAssignedByUser" FromRole="WorkTask" ToRole="User" />
+          <NavigationProperty Name="History" Relationship="DataModel.WorkTaskStatus" FromRole="WorkTask" ToRole="Status" />
+          <NavigationProperty Name="Followers" Relationship="DataModel.WorkTaskFollowingUser" FromRole="WorkTask" ToRole="User" />
+        </EntityType>
+        <Association Name="WorkTaskAssignedToUser">
+          <End Type="DataModel.WorkTask" Role="WorkTask" Multiplicity="*" />
+          <End Type="DataModel.User" Role="User" Multiplicity="0..1" />
+        </Association>
+        <Association Name="WorkTaskAssignedByUser">
+          <End Type="DataModel.WorkTask" Role="WorkTask" Multiplicity="*" />
+          <End Type="DataModel.User" Role="User" Multiplicity="0..1" />
+        </Association>
+        <EntityType Name="StatusMessage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="WorkTask" Relationship="DataModel.WorkTaskStatus" FromRole="Status" ToRole="WorkTask" />
+          <Property Name="WorkTaskId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="DataModel.StatusUser" FromRole="Status" ToRole="User" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="WorkTaskStatus">
+          <End Type="DataModel.WorkTask" Role="WorkTask" Multiplicity="1" />
+          <End Type="DataModel.StatusMessage" Role="Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkTask">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Status">
+              <PropertyRef Name="WorkTaskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StatusUser">
+          <End Type="DataModel.StatusMessage" Role="Status" Multiplicity="*" />
+          <End Type="DataModel.User" Role="User" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Status">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WorkTaskFollowingUser">
+          <End Type="DataModel.WorkTask" Role="WorkTask" Multiplicity="*" />
+          <End Type="DataModel.User" Role="User" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DataModelStoreContainer" CdmEntityContainer="DataModelContainer">
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Login" ColumnName="Login" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkTasks">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.WorkTask)">
+        <MappingFragment StoreEntitySet="WorkTasks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StatusMessages">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.StatusMessage)">
+        <MappingFragment StoreEntitySet="StatusMessages">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="WorkTaskId" ColumnName="WorkTaskId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="WorkTaskAssignedToUser" TypeName="DataModel.WorkTaskAssignedToUser" StoreEntitySet="WorkTasks">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="AssignedToUser_Id" />
+      </EndProperty>
+      <EndProperty Name="WorkTask">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="AssignedToUser_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="WorkTaskAssignedByUser" TypeName="DataModel.WorkTaskAssignedByUser" StoreEntitySet="WorkTasks">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="AssignedByUser_Id" />
+      </EndProperty>
+      <EndProperty Name="WorkTask">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="AssignedByUser_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="WorkTaskFollowingUser" TypeName="DataModel.WorkTaskFollowingUser" StoreEntitySet="WorkTaskFollowingUser">
+      <EndProperty Name="WorkTask">
+        <ScalarProperty Name="Id" ColumnName="Following_Id" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Followers_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
