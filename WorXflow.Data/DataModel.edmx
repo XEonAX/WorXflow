@@ -9,6 +9,7 @@
     <EntitySet Name="Users" EntityType="DataModel.Store.Users" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WorkTasks" EntityType="DataModel.Store.WorkTasks" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="StatusMessages" EntityType="DataModel.Store.StatusMessages" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WebMessages" EntityType="DataModel.Store.WebMessages" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WorkTaskFollowingUser" EntityType="DataModel.Store.WorkTaskFollowingUser" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="WorkTaskAssignedToUser" Association="DataModel.Store.WorkTaskAssignedToUser">
       <End Role="WorkTask" EntitySet="WorkTasks" />
@@ -60,6 +61,14 @@
     <Property Name="WorkTaskId" Type="int" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WebMessages">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="WorkTaskFollowingUser">
     <Key>
@@ -169,6 +178,7 @@
             <End Role="WorkTask" EntitySet="WorkTasks" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="WebMessages" EntityType="DataModel.WebMessage" />
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -240,6 +250,22 @@
           <End Type="DataModel.WorkTask" Role="WorkTask" Multiplicity="*" />
           <End Type="DataModel.User" Role="User" Multiplicity="*" />
         </Association>
+        <EntityType Name="WebMessage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" Nullable="false" />
+          <Property Name="Type" Type="DataModel.Type" Nullable="false" />
+          <Property Name="User" Type="String" Nullable="false" />
+        </EntityType>
+        <EnumType Name="Type" >
+          <Member Name="Direct" />
+          <Member Name="Broadcast" />
+          <Member Name="Error" />
+          <Member Name="Connect" />
+          <Member Name="Disconnect" />
+        </EnumType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -270,6 +296,15 @@
           <ScalarProperty Name="WorkTaskId" ColumnName="WorkTaskId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="Message" ColumnName="Message" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WebMessages">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.WebMessage)">
+        <MappingFragment StoreEntitySet="WebMessages">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

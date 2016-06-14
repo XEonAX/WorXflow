@@ -13,6 +13,7 @@
         <AssociationConnector Association="DataModel.WorkTaskStatus" />
         <AssociationConnector Association="DataModel.StatusUser" />
         <AssociationConnector Association="DataModel.WorkTaskFollowingUser" />
+        <EntityTypeShape EntityType="DataModel.WebMessage" Width="1.5" PointX="10.5" PointY="1.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

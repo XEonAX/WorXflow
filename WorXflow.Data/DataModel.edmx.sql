@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 05/15/2016 18:35:51
+-- Date Created: 06/13/2016 21:17:44
 -- Generated from EDMX file: J:\Root\DOT.NET\WorXflow\WorXflow.Data\DataModel.edmx
 -- --------------------------------------------------
 
@@ -83,6 +83,14 @@ CREATE TABLE [dbo].[StatusMessages] (
 );
 GO
 
+-- Creating table 'WebMessages'
+CREATE TABLE [dbo].[WebMessages] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Text] nvarchar(max)  NOT NULL,
+    [Type] int  NOT NULL
+);
+GO
+
 -- Creating table 'WorkTaskFollowingUser'
 CREATE TABLE [dbo].[WorkTaskFollowingUser] (
     [Following_Id] int  NOT NULL,
@@ -109,6 +117,12 @@ GO
 -- Creating primary key on [Id] in table 'StatusMessages'
 ALTER TABLE [dbo].[StatusMessages]
 ADD CONSTRAINT [PK_StatusMessages]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'WebMessages'
+ALTER TABLE [dbo].[WebMessages]
+ADD CONSTRAINT [PK_WebMessages]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 

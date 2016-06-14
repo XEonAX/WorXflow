@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AEonAX.Shared;
+using Newtonsoft.Json;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using WorXflow.Data;
+
 namespace WorXflow.Server
 {
     public class Processor : NotifyBase
@@ -21,7 +24,7 @@ namespace WorXflow.Server
             this.viewmodel = viewmodel;
         }
 
-        internal void StartServer(string serverName, int portNumber)
+        internal void RestartServer(string serverName, int portNumber)
         {
             Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
             if (WsServer!=null)
@@ -38,6 +41,15 @@ namespace WorXflow.Server
         {
             Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
             return new WorXflowBehavior(this,viewmodel);
+        }
+
+        internal void Send(string inputText)
+        {
+            var msg = JsonConvert.SerializeObject(new WebMessage { User = "Server", Text = inputText, Type = Data.Type.Direct });
+            foreach (var session in viewmodel.OnlineSessions)
+            {
+                session.Context.WebSocket.Send(msg);
+            }
         }
     }
 }

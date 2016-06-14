@@ -8,12 +8,13 @@ using WebSocketSharp.Server;
 
 namespace WorXflow.Server
 {
-    class WorXflowBehavior: WebSocketBehavior
+    class WorXflowBehavior : WebSocketBehavior
     {
         private Processor processor;
         private Viewmodel viewmodel;
-        
-        public WorXflowBehavior(Processor processor, Viewmodel viewmodel) 
+        public string Name { get; set; }
+
+        public WorXflowBehavior(Processor processor, Viewmodel viewmodel)
         {
             this.processor = processor;
             this.viewmodel = viewmodel;
@@ -22,23 +23,24 @@ namespace WorXflow.Server
         protected override void OnOpen()
         {
             base.OnOpen();
+            Name = Context.QueryString["Name"];
             viewmodel.WSS_Open(this);
         }
         protected override void OnClose(CloseEventArgs e)
         {
             base.OnClose(e);
-            viewmodel.WSS_Close(e,this);
+            viewmodel.WSS_Close(e, this);
         }
 
         protected override void OnMessage(MessageEventArgs e)
         {
             base.OnMessage(e);
-            viewmodel.WSS_Message(e,this);
+            viewmodel.WSS_Message(e, this);
         }
         protected override void OnError(ErrorEventArgs e)
         {
             base.OnError(e);
-            viewmodel.WSS_Error(e,this);
+            viewmodel.WSS_Error(e, this);
         }
 
     }

@@ -31,6 +31,8 @@ namespace WorXflow.Server
             VM.ExceptionThrown += VM_ExceptionThrown;
             DataContext = VM;
             InitializeComponent();
+            VM.rtbMessages = rtbMessages;
+            
         }
 
         void VM_ExceptionThrown(object sender, Exception e)
@@ -42,5 +44,9 @@ namespace WorXflow.Server
             VM.Settings.Save();
         }
 
+        private void MWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            VM.Restart.Execute(null);
+        }
     }
 }

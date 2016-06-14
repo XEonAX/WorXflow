@@ -28,5 +28,6 @@ namespace WorXflow.Data
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<WorkTask> WorkTasks { get; set; }
         public virtual DbSet<StatusMessage> StatusMessages { get; set; }
+        public virtual DbSet<WebMessage> WebMessages { get; set; }
     }
 }

@@ -30,6 +30,7 @@ namespace WorXflow.Client
             VM.ExceptionThrown += VM_ExceptionThrown;
             DataContext = VM;
             InitializeComponent();
+            VM.rtbMessages = rtbMessages;
         }
 
         void VM_ExceptionThrown(object sender, Exception e)

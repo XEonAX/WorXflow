@@ -128,6 +128,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WorXflow.Common\WorXflow.Common.csproj">
+      <Project>{07022bc7-7481-401c-95a9-c4d1566b448c}</Project>
+      <Name>WorXflow.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorXflow.Data\WorXflow.Data.csproj">
+      <Project>{bbedc33f-e3c0-4d41-b968-918b3784e438}</Project>
+      <Name>WorXflow.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

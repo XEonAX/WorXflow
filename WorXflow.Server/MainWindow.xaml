@@ -3,50 +3,86 @@
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-                      Title="MainWindow"
+                      Title="WorXflow Server"
                       Height="350"
                       Width="525"
                       GlowBrush="{StaticResource AccentColorBrush}"
-                      Closing="MWindow_Closing">
+                      Closing="MWindow_Closing"
+                      DataContext="{Binding VM,ElementName=MWindow}"
+                      Loaded="MWindow_Loaded">
     <Controls:MetroWindow.Resources>
         <DataTemplate x:Key="SessionTemplate">
             <DockPanel>
-                <TextBlock Text="{Binding ID}" />
-                <TextBlock Text="{Binding Context.UserEndPoint}" />
-                
+                <TextBlock Text="{Binding Name}"
+                           Margin="0,0,5,0" />
+                <!--<TextBlock Text="{Binding ID}"
+                           Margin="0,0,5,0"/>
+                <TextBlock Text="{Binding Context.UserEndPoint}"
+                           Margin="0,0,5,0" />-->
             </DockPanel>
         </DataTemplate>
     </Controls:MetroWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="50" />
             <ColumnDefinition Width="5" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="5" />
             <RowDefinition Height="30" />
-            <RowDefinition />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="1"
-                    Grid.Column="1"
-                    Orientation="Horizontal">
-            <Label>Port:</Label>
-            <TextBox Text="{Binding VM.Settings.PortNumber,ElementName=MWindow}"
-                     VerticalAlignment="Center" />
-            <Button Content="Start"
-                    Command="{Binding VM.StartServer, Mode=OneWay,ElementName=MWindow}" />
-        </StackPanel>
-        <ItemsControl Grid.Column="1"
-                      Grid.Row="2"
-                      ItemTemplate="{StaticResource SessionTemplate}"
-                      ItemsSource="{Binding OnlineSessions}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+        <Label Grid.Column="1"
+               Grid.Row="1">Port:</Label>
+        <TextBox Text="{Binding Settings.PortNumber}"
+                 VerticalAlignment="Center"
+                 Grid.Column="3"
+                 Grid.Row="1" />
+        <Button Content="Restart"
+                Command="{Binding Restart, Mode=OneWay}"
+                VerticalAlignment="Center"
+                Grid.Column="5"
+                Grid.Row="1" />
+        <ScrollViewer Grid.Column="1"
+                      Grid.ColumnSpan="5"
+                      Grid.Row="3">
+            <ItemsControl ItemTemplate="{StaticResource SessionTemplate}"
+                          ItemsSource="{Binding OnlineSessions}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <GridSplitter Grid.Column="0"
+                      Grid.ColumnSpan="7"
+                      Grid.Row="4"
+                      ResizeDirection="Rows"
+                      ResizeBehavior="PreviousAndNext"></GridSplitter>
+        <RichTextBox Grid.Column="1"
+            Grid.ColumnSpan="5"
+            Grid.Row="5" x:Name="rtbMessages"/>
+        <TextBox  Grid.Column="1"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="7"
+                  VerticalAlignment="Center"
+                  Text="{Binding InputText}"></TextBox>
+        <Button Grid.Column="5"
+                Grid.Row="7"
+                VerticalAlignment="Center"
+                Content="Send"
+                Command="{Binding Send}" />
     </Grid>
 </Controls:MetroWindow>
